@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <title>
+      Signup
+    </title>
+    <link rel="stylesheet"  href="users.scss">
+  </head>
+  <body>
+  <h1 class="myborder">BUG TRACKING SYSTEM</h1>
+
+  <ul>
+    <li><%= link_to "View Projects", project_index_path%></li>
+    <li><%= link_to "Create Projects", new_project_path%></li>
+  </ul>
+  <center><h2>New project</h2></center>
+  <div class="container">
+
+    <%=  form_for @project, method: 'post', :url => '/project'  do |form| %>
+
+      <% if @project.errors.any? %>
+        <div id="error_explanation">
+          <h2>
+            <%= pluralize(@project.errors.count, "error") %> prohibited
+            this article from being saved:
+          </h2>
+          <ul>
+            <% @project.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <p>
+        <%= form.label :Project_Name %><br>
+        <%= form.text_field :name %>
+      </p>
+
+      <p>
+        <%= form.label :Description %><br>
+        <%= form.text_area :desc %>
+      </p>
+
+      <p>
+        <%= form.label :Start_date %><br>
+        <%= form.date_field :start_date %>
+      </p>
+
+      <p>
+        <%= form.label :End_Date %><br>
+        <%= form.date_field :end_date %>
+      </p>
+
+      <p>
+        <%= form.submit "Create" %>
+      </p>
+
+    <% end %>
+
+  </div>
+
+  <script>
+      var closebtns = document.getElementsByClassName("close");
+      var i;
+
+      for (i = 0; i < closebtns.length; i++) {
+          closebtns[i].addEventListener("click", function() {
+              this.parentElement.style.display = 'none';
+          });
+      }
+  </script>
+  </body>
+</html>

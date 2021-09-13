@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BugTracker</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+
+    <% if flash[:notice] %>
+      <div class="notification"><%= flash[:notice] %><span class="close">&times;</span></div>
+    <% end %>
+    <%= yield %>
+
+    <% if user_signed_in? %>
+    <%= link_to 'Edit profile', edit_user_registration_path, class: "mylink" %> |
+    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "mylink" %>
+    <% else %>
+    <%= link_to "Sign up", new_user_registration_path, class: "mylink" %> |
+    <%= link_to "Login", new_user_session_path, class: "mylink" %>
+    <% end %>
+
+    <script>
+        var closebtns = document.getElementsByClassName("close");
+        var i;
+
+        for (i = 0; i < closebtns.length; i++) {
+            closebtns[i].addEventListener("click", function() {
+                this.parentElement.style.display = 'none';
+            });
+        }
+    </script>
+
+  </body>
+</html>
