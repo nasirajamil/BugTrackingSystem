@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   get 'project/new', to: 'project#new'
   #post 'project/new'
   resources :project
+  get 'menu', to: 'project#menu'
 end

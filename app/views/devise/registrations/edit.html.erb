@@ -6,8 +6,26 @@
       Signup
     </title>
     <link rel="stylesheet"  href="users.scss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <h1 class="myborder">BUG TRACKING SYSTEM</h1>
+
+  <div class="navbar">
+    <%= link_to "View Projects", project_index_path%>
+    <div class="dropdown">
+      <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
+      <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "right"%>
+      <button class="dropbtn" onclick="myFunction()">
+        <i class="fa fa-caret-down" aria-hidden="true"></i>
+      </button>
+      <div class="dropdown-content" id="myDropdown">
+        <%= link_to "Edit Profile", edit_user_registration_path%>
+        <%= link_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %>
+      </div>
+    </div>
+  </div>
+
+
   <center><h2>Edit <%= resource_name.to_s.humanize %></h2></center>
   <div class="container">
 
@@ -21,7 +39,7 @@
 
       <div class="field">
         <%= f.label :role %><br>
-        <%= f.select(:role, options_for_select([['Developer', 1],['manager',1],['QA',2]]), autofocus: true, autocomplete: "role") %>
+        <%= f.select(:role, options_for_select([['Developer', 1],['manager',2],['QA',3]]), autofocus: true, autocomplete: "role") %>
       </div>
 
       <div class="field">
@@ -33,23 +51,27 @@
         <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
       <% end %>
 
-      <div class="field">
-        <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-        <%= f.password_field :password, autocomplete: "new-password" %>
-        <% if @minimum_password_length %>
-          <br />
-          <em><%= @minimum_password_length %> characters minimum</em>
-        <% end %>
-      </div>
+      <button type="button" id="formButton">ChangePassword</button>
 
-      <div class="field">
-        <%= f.label :password_confirmation %><br />
-        <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-      </div>
+      <div id="mydiv">
+        <div class="field">
+          <%= f.label :password %> <small><i>(leave blank if you don't want to change it)</i></small><br />
+          <%= f.password_field :password, autocomplete: "new-password" %>
+          <% if @minimum_password_length %>
+            <br />
+            <small><em><%= @minimum_password_length %> characters minimum</em></small>
+          <% end %>
+        </div>
 
-      <div class="field">
-        <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-        <%= f.password_field :current_password, autocomplete: "current-password" %>
+        <div class="field">
+          <%= f.label :password_confirmation %><br />
+          <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :current_password %> <small><i>(we need your current password to confirm your changes)</i></small><br />
+          <%= f.password_field :current_password, autocomplete: "current-password" %>
+        </div>
       </div>
 
       <div class="actions">
@@ -58,9 +80,33 @@
     <% end %>
 
   </div>
-  <h3>Cancel my account</h3>
-
-  <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
 
   <%= link_to "Back", :back , class: "mylink"%>
+
+  <script>
+      function myFunction() {
+          document.getElementById("myDropdown").classList.toggle("show");
+      }
+
+      window.onclick = function(event) {
+          if (!event.target.matches('.dropbtn')) {
+              var dropdowns = document.getElementsByClassName("dropdown-content");
+              var i;
+              for (i = 0; i < dropdowns.length; i++) {
+                  var openDropdown = dropdowns[i];
+                  if (openDropdown.classList.contains('show')) {
+                      openDropdown.classList.remove('show');
+                  }
+              }
+          }
+      }
+
+      $(document).ready(function() {
+          $("#formButton").click(function() {
+              $("#mydiv").toggle();
+          });
+      });
+  </script>
+
+
 </html>

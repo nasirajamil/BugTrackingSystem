@@ -3,20 +3,24 @@ class ProjectController < ApplicationController
 
   def index
     @projects=Project.all
+    @user = current_user
   end
 
   def show
+
   end
 
   def new
     @project=Project.new
+    @user = current_user
   end
 
   def create
     @project = Project.new(project_params)
+    @user = current_user
     #@current_user.projects << @project
     if @project.save
-      flash[:success] = "New project successfully created!"
+      flash[:notice] = "New project successfully created!"
       redirect_to project_index_path
     else
       flash.now[:error] = "New project failed to be created."
@@ -33,6 +37,10 @@ class ProjectController < ApplicationController
   end
 
   def update
+
+  end
+
+  def menu
 
   end
 

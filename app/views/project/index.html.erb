@@ -2,18 +2,31 @@
 <html lang="en">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head>
+    <%#= javascript_include_tag( "project.js") %>
+<!--    <script src="javascripts/channels/project.js"></script>-->
     <title>
       Signup
     </title>
     <link rel="stylesheet"  href="users.scss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
   <h1 class="myborder">BUG TRACKING SYSTEM</h1>
 
-  <ul>
-    <li><%= link_to "View Projects", project_index_path%></li>
-    <li><%= link_to "Create Projects", new_project_path%></li>
-  </ul>
+  <div class="navbar">
+    <%= link_to "View Projects", project_index_path%>
+    <div class="dropdown">
+      <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
+      <%= link_to "Logout", destroy_user_session_path, method: :delete%>
+      <button class="dropbtn" onclick="myFunction()">
+        <i class="fa fa-caret-down" aria-hidden="true"></i>
+      </button>
+      <div class="dropdown-content" id="myDropdown">
+        <%= link_to "Edit Profile", edit_user_registration_path%>
+        <%= link_to "Cancel my account", registration_path(@user), data: { confirm: "Are you sure?" }, method: :delete %>
+      </div>
+    </div>
+  </div>
 
   <center><h2>All projects</h2></center>
 
@@ -32,15 +45,34 @@
         <td style="width:300px"><%= p.desc %></td>
         <td style="width:300px"><%= p.start_date %></td>
         <td style="width:300px"><%= p.end_date %></td>
-        <td class="actions buttons"><%= link_to 'Show', project_path(p) %></td>
-        <td class="actions buttons"><%= link_to 'Edit', edit_project_path(p) %></td>
-        <td class="actions buttons"><%= link_to 'Destroy', project_path(p),
+        <td class="actions buttons"><%= button_to 'Show', project_path(p), class:"mylink" %></td>
+        <td class="actions buttons"><%= button_to 'Edit', edit_project_path(p), class:"mylink"  %></td>
+        <td class="actions buttons"><%= button_to 'Destroy', project_path(p),
                                                 method: :delete,
-                                                data: { confirm: 'Are you sure?' } %></td>
+                                                data: { confirm: 'Are you sure?' }, class:"mylink"  %></td>
       </tr>
     <% end %>
   </table>
   <br>
+
+  <script>
+      function myFunction() {
+          document.getElementById("myDropdown").classList.toggle("show");
+      }
+
+      window.onclick = function(event) {
+          if (!event.target.matches('.dropbtn')) {
+              var dropdowns = document.getElementsByClassName("dropdown-content");
+              var i;
+              for (i = 0; i < dropdowns.length; i++) {
+                  var openDropdown = dropdowns[i];
+                  if (openDropdown.classList.contains('show')) {
+                      openDropdown.classList.remove('show');
+                  }
+              }
+          }
+      }
+  </script>
 
   </body>
 </html>
