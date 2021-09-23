@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head>
     <title>
-      Signup
+      Create a bug
     </title>
     <link rel="stylesheet"  href="users.scss">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -14,55 +14,52 @@
   <div class="navbar">
     <%= link_to "View Projects", project_index_path%>
     <div class="dropdown">
-      <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
       <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "right"%>
       <button class="dropbtn" onclick="myFunction()">
         <i class="fa fa-caret-down" aria-hidden="true"></i>
       </button>
       <div class="dropdown-content" id="myDropdown">
         <%= link_to "Edit Profile", edit_user_registration_path%>
-        <%= link_to "Cancel my account", registration_path(@user), data: { confirm: "Are you sure?" }, method: :delete %>
+        <%= button_to "Cancel my account", registration_path(@user), data: { confirm: "Are you sure?" }, method: :delete %>
       </div>
     </div>
   </div>
 
-  <center><h2>New project</h2></center>
+  <center><h2>New Bug</h2></center>
   <div class="container">
+    <%=  form_for @bug, method: 'post', :url => {:action => "create",:project_id => @id}  do |form| %>
 
-    <%=  form_for @project, method: 'post', :url => '/project'  do |form| %>
-
-      <% if @project.errors.any? %>
+      <% if @bug.errors.any? %>
         <div id="error_explanation">
           <ul>
-            <% @project.errors.full_messages.each do |msg| %>
+            <% @bug.errors.full_messages.each do |msg| %>
               <div class="mynotification">
                 <li class="left"><%= msg %></li><span class="close">&times;</span>
               </div>
-
-          <% end %>
+            <% end %>
           </ul>
         </div>
       <% end %>
 
       <p>
-        <%= form.label :Project_Name %><br>
-        <%= form.text_field :name %>
+        <%= form.label :Bug_Title %><br>
+        <%= form.text_field :title %>
       </p>
 
       <p>
-        <%= form.label :Description %><br>
-        <%= form.text_area :desc %>
+        <%= form.label :deadline %><br>
+        <%= form.date_field :deadline %>
       </p>
 
-      <p>
-        <%= form.label :Start_date %><br>
-        <%= form.date_field :start_date %>
-      </p>
+      <div class="field">
+        <%= form.label :type %><br>
+        <%= form.select(:bugtype, options_for_select([['bug', 1],['feature',2]]), autofocus: true, autocomplete: "bugtype") %>
+      </div>
 
-      <p>
-        <%= form.label :End_Date %><br>
-        <%= form.date_field :end_date %>
-      </p>
+      <div class="field">
+        <%= form.label :status %><br>
+        <%= form.select(:status, options_for_select([['new', "new"],['started',"started"],['completed',"completed"]]), autofocus: true, autocomplete: "status") %>
+      </div>
 
       <p>
         <%= form.submit "Create", class: "mybutton" %>

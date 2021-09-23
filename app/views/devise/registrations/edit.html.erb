@@ -50,10 +50,15 @@
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
         <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
       <% end %>
-
-      <button type="button" id="formButton">ChangePassword</button>
-
-      <div id="mydiv">
+      <br>
+      <div class="field">
+        <%= f.label :current_password %> <small><i>(we need your current password to confirm your changes)</i></small><br />
+        <%= f.password_field :current_password, autocomplete: "current-password" %>
+      </div>
+      <br>
+      <link_to class= "link", onclick="toggleform()">change password?</link_to>
+      <br>
+      <div id="myid">
         <div class="field">
           <%= f.label :password %> <small><i>(leave blank if you don't want to change it)</i></small><br />
           <%= f.password_field :password, autocomplete: "new-password" %>
@@ -68,14 +73,10 @@
           <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
         </div>
 
-        <div class="field">
-          <%= f.label :current_password %> <small><i>(we need your current password to confirm your changes)</i></small><br />
-          <%= f.password_field :current_password, autocomplete: "current-password" %>
-        </div>
       </div>
-
+      <br>
       <div class="actions">
-        <%= f.submit "Update", class: "mylink"%>
+        <%= f.submit "Update", class: "mybutton"%>
       </div>
     <% end %>
 
@@ -101,11 +102,14 @@
           }
       }
 
-      $(document).ready(function() {
-          $("#formButton").click(function() {
-              $("#mydiv").toggle();
-          });
-      });
+      function toggleform(){
+          var x = document.getElementById("myid");
+          if (x.style.display === "none") {
+              x.style.display = "block";
+          } else {
+              x.style.display = "none";
+          }
+      }
   </script>
 
 

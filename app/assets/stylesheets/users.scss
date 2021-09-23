@@ -1,6 +1,4 @@
 body{
-  border:5px solid black;
-  min-height:600px;
   margin:10px 10px 10px 10px;
   padding: 10px 10px 10px 10px;
   background-color: #666666;
@@ -18,11 +16,23 @@ body{
 .container{
   background-color:gray;
   border: 1px solid gray;
-  margin-left:auto;
-  margin-right:auto;
-  padding:10px 10px 10px 10px;
+  margin-right: auto;
+  margin-left: auto;
+  padding:8px 8px 8px 8px;
   height:100%;
   width:250px;
+}
+
+.othercontainer{
+  background-color:gray;
+  border: 1px solid gray;
+  margin-right: auto;
+  margin-left: auto;
+
+  height:100%;
+  width:250px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .mylink{
@@ -120,11 +130,88 @@ li a:hover {
   color: burlywood;
 }
 
-#formButton {
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
+#mydevelopers {
+  display: none;
 }
+
+#myQAs {
+  display: none;
+}
+
+#changeStatus1 {
+  display: none;
+}
+#changeStatus2 {
+  display: none;
+}
+
+#changeStatus3 {
+  display: none;
+}
+
+#changeStatus4 {
+  display: none;
+}
+
+.link{
+  text-decoration: none;
+  text-decoration-color: red;
+  color: red;
+}
+
+table{
+
+}
+
+.mybuttons{
+  text-decoration: none;
+  text-decoration-color: white;
+}
+
+.btn-group button {
+  background-color: burlywood; /* Green background */
+  border: 1px solid white; /* Green border */
+  color: white; /* White text */
+  padding: 7px 20px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: none;
+}
+
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: burlywood;
+}
+td{
+  width: 150px;
+}
+.column {
+  float: left;
+  width: 20%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.cellLength{
+  width :600px;
+}
+
+
+
 
 
 
