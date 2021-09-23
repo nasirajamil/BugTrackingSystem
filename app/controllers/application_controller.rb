@@ -16,6 +16,20 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     new_project_path
+    if current_user.role == "2"
+      project_index_path
+    elsif current_user.role == "3"
+      menu_path
+    else
+      developer_menu_path
+    end
+  end
+
+  private
+
+  def user_not_authorized
+    flash[:notice] = "You are not authorized to perform this action."
+    redirect_to(request.referrer || home_errorpage_path)
   end
 
 end

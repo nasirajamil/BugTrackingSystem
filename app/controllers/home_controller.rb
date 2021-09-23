@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  def homepage
+  def errorpage
 
   end
 end
