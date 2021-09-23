@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head>
-    <%#= javascript_include_tag( "project.js") %>
-<!--    <script src="javascripts/channels/project.js"></script>-->
     <title>
       Signup
     </title>
@@ -14,9 +12,7 @@
   <h1 class="myborder">BUG TRACKING SYSTEM</h1>
 
   <div class="navbar">
-    <%= link_to "View Projects", project_index_path%>
     <div class="dropdown">
-      <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
       <%= link_to "Logout", destroy_user_session_path, method: :delete%>
       <button class="dropbtn" onclick="myFunction()">
         <i class="fa fa-caret-down" aria-hidden="true"></i>
@@ -28,40 +24,41 @@
     </div>
   </div>
 
-  <center><h2>All projects</h2></center>
+  <center><h2>All projects of Developer</h2></center>
 
+  <%check=0 %>
+  <% @projects.each do |p| %>
+    <%puts p.name %>
+    <%if p.users.where(role:"1").blank?%>
+    <%else %>
+      <div class="container">
+        <p>
+          <strong>Name:</strong>
+          <%= p.name %>
+        </p>
 
-    <% @projects.each do |p| %>
-    <div class="container">
-      <p>
-        <strong>Name:</strong>
-        <%= p.name %>
-      </p>
+        <p>
+          <strong>Description:</strong>
+          <%= p.desc %>
+        </p>
 
-      <p>
-        <strong>Description:</strong>
-        <%= p.desc %>
-      </p>
+        <p>
+          <strong>Start Date:</strong>
+          <%= p.start_date %>
+        </p>
 
-      <p>
-        <strong>Start Date:</strong>
-        <%= p.start_date %>
-      </p>
+        <p>
+          <strong>End Date:</strong>
+          <%= p.end_date %>
+        </p>
 
-      <p>
-        <strong>End Date:</strong>
-        <%= p.end_date %>
-      </p>
-
-      <div class="btn-group">
-        <button><%= link_to 'show', project_path(p), class:"mybuttons"%></button>
-        <button><%= link_to 'update', edit_project_path(p), class:"mybuttons"%></button>
-        <button><%= link_to 'delete', project_path(p), method: :delete,
-                            data: { confirm: 'Are you sure?' }, class:"mybuttons" %></button>
+        <div class="btn-group">
+          <center><button><%= link_to 'show', project_path(p), class:"mybuttons"%></button></center>
+        </div>
       </div>
-    </div>
-  <br>
-  <% end %>
+      <br>
+    <% end %>
+  <%end %>
 
   <br>
 

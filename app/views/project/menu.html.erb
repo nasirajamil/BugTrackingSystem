@@ -14,8 +14,7 @@
   <div class="navbar">
     <%= link_to "View Projects", project_index_path%>
     <div class="dropdown">
-      <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
-      <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "right"%>
+      <%= link_to "Logout", destroy_user_session_path, method: :delete%>
       <button class="dropbtn" onclick="myFunction()">
         <i class="fa fa-caret-down" aria-hidden="true"></i>
       </button>
@@ -26,64 +25,41 @@
     </div>
   </div>
 
-  <center><h2>New project</h2></center>
-  <div class="container">
+  <center><h2>All projects</h2></center>
 
-    <%=  form_for @project, method: 'post', :url => '/project'  do |form| %>
 
-      <% if @project.errors.any? %>
-        <div id="error_explanation">
-          <ul>
-            <% @project.errors.full_messages.each do |msg| %>
-              <div class="mynotification">
-                <li class="left"><%= msg %></li><span class="close">&times;</span>
-              </div>
-
-          <% end %>
-          </ul>
-        </div>
-      <% end %>
-
+  <% @projects.each do |p| %>
+    <div class="container">
       <p>
-        <%= form.label :Project_Name %><br>
-        <%= form.text_field :name %>
+        <strong>Name:</strong>
+        <%= p.name %>
       </p>
 
       <p>
-        <%= form.label :Description %><br>
-        <%= form.text_area :desc %>
+        <strong>Description:</strong>
+        <%= p.desc %>
       </p>
 
       <p>
-        <%= form.label :Start_date %><br>
-        <%= form.date_field :start_date %>
+        <strong>Start Date:</strong>
+        <%= p.start_date %>
       </p>
 
       <p>
-        <%= form.label :End_Date %><br>
-        <%= form.date_field :end_date %>
+        <strong>End Date:</strong>
+        <%= p.end_date %>
       </p>
 
-      <p>
-        <%= form.submit "Create", class: "mybutton" %>
-      </p>
+      <div class="btn-group">
+        <button><%= link_to 'show', project_path(p), class:"mybuttons"%></button>
+      </div>
+    </div>
+    <br>
+  <% end %>
 
-    <% end %>
-
-  </div>
-
-  <%=link_to "Back", project_index_path,class: "mylink"   %>
+  <br>
 
   <script>
-      var closebtns = document.getElementsByClassName("close");
-      var i;
-
-      for (i = 0; i < closebtns.length; i++) {
-          closebtns[i].addEventListener("click", function() {
-              this.parentElement.style.display = 'none';
-          });
-      }
-
       function myFunction() {
           document.getElementById("myDropdown").classList.toggle("show");
       }
@@ -100,7 +76,7 @@
               }
           }
       }
-
   </script>
+
   </body>
 </html>
