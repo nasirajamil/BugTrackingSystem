@@ -3,6 +3,7 @@ class ProjectController < ApplicationController
 
   def index
     @projects = Project.all
+    authorize @projects
     @user = current_user
   end
 
@@ -20,6 +21,7 @@ class ProjectController < ApplicationController
 
   def new
     @project = Project.new
+    authorize @project
     @user = current_user
   end
 
@@ -38,6 +40,7 @@ class ProjectController < ApplicationController
 
   def destroy
     @project = Project.find(params[:id])
+    authorize @project
     puts @project
     @project.destroy
     redirect_to project_index_path
@@ -46,6 +49,7 @@ class ProjectController < ApplicationController
   def edit
     @user = current_user
     @project = Project.find(params[:id])
+    authorize @project
   end
 
   def update
@@ -90,6 +94,7 @@ class ProjectController < ApplicationController
 
   def add_user_to_project
     @project = Project.find(params[:id])
+    authorize @project
     @user_id = params[:user_roles]
     @assigned_user = User.where(id: @user_id)
     @user = current_user
