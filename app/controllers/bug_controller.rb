@@ -3,6 +3,7 @@ class BugController < ApplicationController
   
   def new
     @bug = Bug.new
+    authorize @bug
     @user = current_user
     @id = params[:project_id]
   end
