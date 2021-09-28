@@ -1,0 +1,65 @@
+<% content_for :title, "New task" %>
+<div class="navbar">
+  <%= link_to "View Projects", project_index_path%>
+  <div class="dropdown">
+    <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
+    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "right"%>
+    <button class="dropbtn" onclick="myFunction()">
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </button>
+    <div class="dropdown-content" id="myDropdown">
+      <%= link_to "Edit Profile", edit_user_registration_path%>
+      <%= link_to "Cancel my account", registration_path(current_user), data: { confirm: "Are you sure?" }, method: :delete %>
+    </div>
+  </div>
+</div>
+<center>
+  <h1>New Event</h1>
+</center>
+<div class="taskcontainer">
+  <%= form_with(model: @task, local: true) do |form| %>
+    <% if @task.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h2>
+        <ul>
+          <% @task.errors.full_messages.each do |message| %>
+            <li><%= massage %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="field">
+      <%= form.label :title %>
+      <br>
+      <%= form.text_field :title %>
+    </div>
+    <div class="field">
+      <%= form.label :desc %>
+      <br>
+      <%= form.text_field :description %>
+    </div>
+    <div class="field">
+      <%= form.label :start_date %>
+      <br>
+      <%= form.datetime_select :start_date %>
+    </div>
+    <div class="field">
+      <%= form.label :end_date %>
+      <br>
+      <%= form.datetime_select :end_date %>
+    </div>
+    <div class="field">
+      <%= form.label :event %>
+      <br>
+      <%= form.text_field :event %>
+    </div>
+    <div class="field">
+      <%= form.label :members %>
+      <br>
+      <%= form.text_field :members %>
+    </div>
+    <div class="actions">
+      <%= form.submit %>
+    </div>
+  <% end %>
+</div>

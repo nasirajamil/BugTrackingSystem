@@ -1,9 +1,13 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!
+  include Pundit
+
   protect_from_forgery
+
+  before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :configure_account_update_params, if: :devise_controller?
-  #before_action after_sign_up_path_for(@user), if: :devise_controller?
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
   def configure_permitted_parameters
@@ -15,13 +19,12 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    new_project_path
-    if current_user.role == "2"
-      project_index_path
-    elsif current_user.role == "3"
+    if current_user.developer?
+      developer_menu_path
+    elsif current_user.qa?
       menu_path
     else
-      developer_menu_path
+      project_index_path
     end
   end
 
@@ -29,7 +32,6 @@ class ApplicationController < ActionController::Base
 
   def user_not_authorized
     flash[:notice] = "You are not authorized to perform this action."
-    redirect_to(request.referrer || home_errorpage_path)
+    redirect_to(request.referrer || home_error_page_path)
   end
-
 end

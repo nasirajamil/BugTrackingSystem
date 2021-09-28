@@ -1,0 +1,48 @@
+<% content_for :title, "Show Project" %>
+<div class="navbar">
+  <%if not @user.developer? %>
+    <%= link_to "View Projects", project_index_path%>
+  <%end %>
+  <div class="dropdown">
+    <%if @user.manager? %>
+      <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
+    <%end %>
+    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "right"%>
+    <button class="dropbtn" onclick="myFunction()">
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </button>
+    <div class="dropdown-content" id="myDropdown">
+      <%= link_to "Edit Profile", edit_user_registration_path%>
+      <%= link_to "Cancel my account", registration_path(@user), data: { confirm: "Are you sure?" }, method: :delete %>
+    </div>
+  </div>
+</div>
+<br><br>
+<!--end of div-->
+<div class="container">
+  <center><h3>Bug</h3></center>
+  <p>
+    <strong>Name:</strong>
+    <%= @bug.title %>
+  </p>
+  <p>
+    <strong>Description:</strong>
+    <%= @bug.deadline %>
+  </p>
+  <p>
+    <strong>Bug Type:</strong>
+    <%=@bug.bugtype %>
+  </p>
+  <p>
+    <strong>Status:</strong>
+    <%=@bug.status %>
+  </p>
+  <%if @bug.avatar.attached? %>
+    <%=image_tag @bug.avatar, class:"myavatar" %>
+  <% end %>
+  <br>
+  <center><button><%= link_to 'delete', project_bug_path(@project,@bug), method: :delete,
+                              data: { confirm: 'Are you sure?' }, class:"mybuttons" %></button></center>
+</div>
+<br>
+<%=link_to "Back", project_path(@project),class: "mylink"   %>

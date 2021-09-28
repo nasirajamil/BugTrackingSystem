@@ -1,0 +1,81 @@
+<% content_for :title, "New Bug" %>
+<div class="navbar">
+  <%= link_to "View Projects", project_index_path%>
+  <div class="dropdown">
+    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "right"%>
+    <button class="dropbtn" onclick="myFunction()">
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </button>
+    <div class="dropdown-content" id="myDropdown">
+      <%= link_to "Edit Profile", edit_user_registration_path%>
+      <%= button_to "Cancel my account", registration_path(@user), data: { confirm: "Are you sure?" }, method: :delete %>
+    </div>
+  </div>
+</div>
+<center>
+  <h2>New Bug</h2>
+</center>
+<div class="container">
+  <%=  form_for @bug, method: 'post', :url => {:action => "create",:project_id => @id}  do |form| %>
+    <% if @bug.errors.any? %>
+      <div id="error_explanation">
+        <ul>
+          <% @bug.errors.full_messages.each do |msg| %>
+            <div class="mynotification">
+              <li class="left"><%= msg %></li>
+              <span class="close">&times;</span>
+            </div>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <p>
+      <%= form.label :Bug_Title %><br>
+      <%= form.text_field :title %>
+    </p>
+    <p>
+      <%= form.label :deadline %><br>
+      <%= form.date_field :deadline %>
+    </p>
+    <div class="field">
+      <%= form.label :type %><br>
+      <%= form.select(:bugtype, options_for_select([['bug', 'bug'],['feature','feature']]), autofocus: true, autocomplete: "bugtype") %>
+    </div>
+    <div class="field">
+      <%= form.label :status %><br>
+      <%= form.select(:status, options_for_select([['new', "new"],['started',"started"],['completed',"completed"]]), autofocus: true, autocomplete: "status") %>
+    </div>
+    <div class="field">
+      <%= form.label :avatar %><br>
+      <%= form.file_field :avatar %>
+    <p>
+      <%= form.submit "Create", class: "mybutton" %>
+    </p>
+  <% end %>
+</div>
+<%=link_to "Back", project_index_path,class: "mylink"   %>
+<script>
+  var closebtns = document.getElementsByClassName("close");
+  var i;
+  for (i = 0; i < closebtns.length; i++) {
+    closebtns[i].addEventListener("click", function() {
+        this.parentElement.style.display = 'none';
+    });
+  }
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+  }
+</script>

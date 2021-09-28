@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   
   def google_oauth2
@@ -30,7 +28,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   # GET|POST /resource/auth/twitter
   # def passthru
-  #   super
+  #   puts 'ffffff'
+  #   # google_oauth2
   # end
 
   # GET|POST /users/auth/twitter/callback
