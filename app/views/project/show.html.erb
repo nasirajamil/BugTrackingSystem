@@ -1,0 +1,341 @@
+<% content_for :title, "Show Project" %>
+<div class="navbar">
+  <%if not @user.developer? %>
+    <%= link_to "View Projects", project_index_path%>
+  <%end %>
+  <div class="dropdown">
+    <%if @user.manager? %>
+      <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
+    <%end %>
+    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "right"%>
+    <button class="dropbtn" onclick="myFunction()">
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </button>
+    <div class="dropdown-content" id="myDropdown">
+      <%= link_to "Edit Profile", edit_user_registration_path%>
+      <%= link_to "Cancel my account", registration_path(@user), data: { confirm: "Are you sure?" }, method: :delete %>
+    </div>
+  </div>
+</div>
+<br><br>
+<!--end of div-->
+<div class="row">
+  <div class="column">
+    <h3>Project</h3>
+    <p>
+      <strong>Name:</strong>
+      <%= @project.name %>
+    </p>
+    <p>
+      <strong>Description:</strong>
+      <%= @project.desc %>
+    </p>
+    <p>
+      <strong>Owner/s:</strong>
+    <table>
+      <% @owners.each do |o| %>
+        <tr>
+          <td>
+            <%if o.developer? %>
+              <b>Developer:</b><br>
+            <%elsif o.manager? %>
+              <b>Manager:</b><br>
+            <%else %>
+              <b>QA:</b><br>
+            <%end %>
+            <%= o.name %>
+          </td>
+          <td>
+            <% if @user.manager? && (not o.manager?) %>
+              <%= form_with :url => {:action => "remove_user_from_project",:Pid=>@project.id,:Uid => o.id}, local: true do |form| %>
+                <%= form.submit("remove") %>
+              <% end %>
+            <%end %>
+          </td>
+        </tr>
+      <%end %>
+    </table>
+    </p>
+    <p>
+      <strong>Start Date:</strong>
+      <%= @project.start_date %>
+    </p>
+    <p>
+      <strong>End Date:</strong>
+      <%= @project.end_date %>
+    </p>
+    <br>
+    <br><br>
+    <% if @user.qa? %>
+      <%=link_to "Report a bug",new_project_bug_path(@project), class:"mylink" %>
+    <%end %>
+    <br>
+    <%if @user.manager? %>
+      <link_to class= "link", onclick="toggleDeveloprs()">want to add Developers?</link_to>
+      <br>
+      <link_to class= "link", onclick="toggleQAs()">want to add QAs?</link_to>
+    <%end %>
+    <%= form_with id: 'mydevelopers', :url => {:action => "add_user_to_project",:id => @project.id}, local: true do |form| %>
+      <%= form.select(:user_roles, options_from_collection_for_select(@developers, :id, :name) ) %>
+      <br><br>
+      <%= form.submit("add") %>
+    <% end %>
+    <%= form_with id: 'myQAs', :url => {:action => "add_user_to_project",:id => @project.id}, local: true do |form| %>
+      <%= form.select(:user_roles, options_from_collection_for_select(@QAs, :id, :name) ) %>
+      <br><br>
+      <%= form.submit("add") %>
+    <% end %>
+  </div>
+  <%if @user.developer? %>
+    <div class="column">
+      <div class="othercontainer">
+        <center>
+          <h3>Assigned Bugs</h3>
+        </center>
+        <%if @bugs.blank? %>
+          <br><br>
+          <center><b>No Reported errors</b></center>
+        <% end %>
+        <% @bugs.each do |b| %>
+          <%if b.users.where(role:"developer").blank?%>
+          <%else %>
+            <p>
+              <strong>Title:</strong>
+              <%=b.title %>
+            </p>
+            <p>
+              <strong>Deadline:</strong>
+              <%=b.deadline %>
+            </p>
+            <p>
+              <strong>Bug Type:</strong>
+              <%=b.bugtype %>
+            </p>
+            <p>
+              <strong>Status:</strong>
+              <%=b.status %>
+            </p>
+              <link_to class= "link", onclick="toggleform2()">change status of error</link_to>
+            <%= form_with id: 'changeStatus1', :url => {:action => "change_status",:bug_id => b.id,:project_id=>@project.id}, local: true do |form| %>
+              <%= form.select(:status, options_for_select(["new","started","completed"]) ) %>
+              <br><br>
+              <%= form.submit("change") %>
+            <% end %>
+            <br>
+            <br>
+            <center><%=link_to 'show Bug',project_bug_path(@project,b),class:"mybutton" %></center>
+            <hr>
+          <%end %>
+        <% end %>
+        <br>
+      </div>
+    </div>
+  <%end %>
+  <div class="column">
+    <div class="othercontainer">
+      <center>
+        <h3>New Bugs</h3>
+      </center>
+      <%if new_bugs(@project).blank? %>
+        <br><br>
+        <center><b>No Reported errors</b></center>
+      <% end %>
+      <% new_bugs(@project).each do |b| %>
+        <p>
+          <strong>Title:</strong>
+          <%=b.title %>
+        </p>
+        <p>
+          <strong>Deadline:</strong>
+          <%=b.deadline %>
+        </p>
+        <p>
+          <strong>Bug Type:</strong>
+          <%=b.bugtype %>
+        </p>
+        <p>
+          <strong>Status:</strong>
+          <%=b.status %>
+        </p>
+        <%if @user.qa? %>
+            <link_to class= "link", onclick="toggleform3()">change status of error</link_to>
+          <%= form_with id: 'changeStatus2', :url => {:action => "change_status",:bug_id => b.id,:project_id=>@project.id}, local: true do |form| %>
+            <%= form.select(:status, options_for_select(["new","started","completed"]) ) %>
+            <br><br>
+            <%= form.submit("change") %>
+          <% end %>
+        <%end %>
+        <%if @user.developer? %>
+          <%= form_with :url => {:action => "assign_bug",:bug_id => b.id,:project_id=>@project.id}, local: true do |form| %>
+            <%= form.submit("Assign Bug To yourself") %>
+          <% end %>
+        <%end %>
+        <br>
+        <center><%=link_to 'show Bug',project_bug_path(@project,b),class:"mybutton" %></center>
+        <hr>
+      <% end %>
+      <br>
+    </div>
+  </div>
+  <div class="column">
+    <div class="othercontainer">
+      <center>
+        <h3>started Bugs</h3>
+      </center>
+      <%if started_bugs(@project).blank? %>
+        <br><br>
+        <center><b>No Reported errors</b></center>
+      <% end %>
+      <% started_bugs(@project).each do |b| %>
+        <p>
+          <strong>Title:</strong>
+          <%=b.title %>
+        </p>
+        <p>
+          <strong>Deadline:</strong>
+          <%=b.deadline %>
+        </p>
+        <p>
+          <strong>Bug Type:</strong>
+          <%= b.bugtype%>
+        </p>
+        <p>
+          <strong>Status:</strong>
+          <%=b.status %>
+        </p>
+        <%if @user.qa? %>
+            <link_to class= "link", onclick="toggleform4()">change status of error</link_to>
+          <%= form_with id: 'changeStatus3', :url => {:action => "change_status",:bug_id => b.id,:project_id=>@project.id}, local: true do |form| %>
+            <%= form.select(:status, options_for_select(["new","started","completed"]) ) %>
+            <br><br>
+            <%= form.submit("change") %>
+          <% end %>
+        <%end %>
+        <br>
+        <center><%=link_to 'show Bug',project_bug_path(@project,b),class:"mybutton" %></center>
+        <hr>
+      <% end %>
+      <br>
+    </div>
+  </div>
+  <div class="column">
+    <div class="othercontainer">
+      <center>
+        <h3>completed Bugs</h3>
+      </center>
+      <% completed_bugs(@project).each do |b| %>
+        <p>
+          <strong>Title:</strong>
+          <%=b.title %>
+        </p>
+        <p>
+          <strong>Deadline:</strong>
+          <%=b.deadline %>
+        </p>
+        <p>
+          <strong>Bug Type:</strong>
+          <%= b.bugtype%>
+        </p>
+        <p>
+          <strong>Status:</strong>
+          <%=b.status %>
+        </p>
+        <%if @user.qa? %>
+            <link_to class= "link", onclick="toggleform5()">change status of error</link_to>
+          <%= form_with id: 'changeStatus4', :url => {:action => "change_status",:bug_id => b.id,:project_id=>@project.id}, local: true do |form| %>
+            <%= form.select(:status, options_for_select(["new","started","completed"]) ) %>
+            <br><br>
+            <%= form.submit("change") %>
+          <% end %>
+        <%end %>
+        <br>
+        <center><%=link_to 'show Bug',project_bug_path(@project,b),class:"mybutton" %></center>
+        <hr>
+      <% end %>
+      <br>
+    </div>
+  </div>
+</div>
+<br>
+<%=link_to "Back", project_index_path,class: "mylink"   %>
+<br>
+<script>
+  var closebtns = document.getElementsByClassName("close");
+  var i;
+  for (i = 0; i < closebtns.length; i++) {
+    closebtns[i].addEventListener("click", function() {
+        this.parentElement.style.display = 'none';
+    });
+  }
+
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+
+  function toggleDeveloprs(){
+    var a1 = document.getElementById("mydevelopers");
+    if (a1.style.display === "none") {
+      a1.style.display = "block";
+    } else {
+      a1.style.display = "none";
+    }
+  }
+
+  function toggleQAs(){
+    var a1 = document.getElementById("myQAs");
+    if (a1.style.display === "none") {
+      a1.style.display = "block";
+    } else {
+      a1.style.display = "none";
+    }
+  }
+
+  function toggleform2(){
+    var a2 = document.getElementById("changeStatus1");
+    if (a2.style.display === "none") {
+      a2.style.display = "block";
+    } else {
+      a2.style.display = "none";
+    }
+  }
+
+  function toggleform3(){
+    var a3 = document.getElementById("changeStatus2");
+    if (a3.style.display === "none") {
+      a3.style.display = "block";
+    } else {
+      a3.style.display = "none";
+    }
+  }
+
+  function toggleform4(){
+    var a4 = document.getElementById("changeStatus3");
+    if (a4.style.display === "none") {
+      a4.style.display = "block";
+    } else {
+      a4.style.display = "none";
+    }
+  }
+
+  function toggleform5(){
+    var a5 = document.getElementById("changeStatus4");
+    if (a5.style.display === "none") {
+      a5.style.display = "block";
+    } else {
+      a5.style.display = "none";
+    }
+  }
+</script>

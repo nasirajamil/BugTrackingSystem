@@ -1,46 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <head>
-    <title>
-      Signup
-    </title>
-    <link rel="stylesheet"  href="users.scss">
-  </head>
-  <body>
-  <h1 class="myborder">BUG TRACKING SYSTEM</h1>
-
-  <ul>
-    <li><%= link_to "View Projects", project_index_path%></li>
-    <li><%= link_to "Create Projects", new_project_path%></li>
-  </ul>
-
-  <center><h2>All projects</h2></center>
-
-  <table border=1>
-    <tr>
-      <th>Name</th>
-      <th>Desc</th>
-      <th>Start_date</th>
-      <th>End_date</th>
-      <th colspan="3">Actions</th>
-    </tr>
-
-    <% @projects.each do |p| %>
-      <tr>
-        <td style="width:100px"><%= p.name %></td>
-        <td style="width:300px"><%= p.desc %></td>
-        <td style="width:300px"><%= p.start_date %></td>
-        <td style="width:300px"><%= p.end_date %></td>
-        <td class="actions buttons"><%= link_to 'Show', project_path(p) %></td>
-        <td class="actions buttons"><%= link_to 'Edit', edit_project_path(p) %></td>
-        <td class="actions buttons"><%= link_to 'Destroy', project_path(p),
-                                                method: :delete,
-                                                data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </table>
+<% content_for :title, "All Projects" %>
+<div class="navbar">
+  <%= link_to "View Projects", project_index_path%>
+  <div class="dropdown">
+    <%= link_to "", new_project_path,class: "fa fa-plus fa-5x"%>
+    <%= link_to "Logout", destroy_user_session_path, method: :delete%>
+    <button class="dropbtn" onclick="myFunction()">
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </button>
+    <div class="dropdown-content" id="myDropdown">
+      <%= link_to "Edit Profile", edit_user_registration_path%>
+      <%= link_to "Cancel my account", registration_path(@user), data: { confirm: "Are you sure?" }, method: :delete %>
+    </div>
+  </div>
+</div>
+<center>
+  <h2>All projects</h2>
+</center>
+<% @projects.each do |p| %>
+  <div class="container">
+    <p>
+      <strong>Name:</strong>
+      <%= p.name %>
+    </p>
+    <p>
+      <strong>Description:</strong>
+      <%= p.desc %>
+    </p>
+    <p>
+      <strong>Start Date:</strong>
+      <%= p.start_date %>
+    </p>
+    <p>
+      <strong>End Date:</strong>
+      <%= p.end_date %>
+    </p>
+    <div class="btn-group">
+      <button><%= link_to 'show', project_path(p), class:"mybuttons"%></button>
+      <button><%= link_to 'update', edit_project_path(p), class:"mybuttons"%></button>
+      <button><%= link_to 'delete', project_path(p), method: :delete,
+                          data: { confirm: 'Are you sure?' }, class:"mybuttons" %></button>
+    </div>
+  </div>
   <br>
+<% end %>
+<br>
+<script>
+  function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+  }
 
-  </body>
-</html>
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+</script>

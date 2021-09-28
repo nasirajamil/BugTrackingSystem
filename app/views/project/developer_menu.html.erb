@@ -1,0 +1,60 @@
+<% content_for :title, "Developer Menu" %>
+<div class="navbar">
+  <div class="dropdown">
+    <%= link_to "Logout", destroy_user_session_path, method: :delete%>
+    <button class="dropbtn" onclick="myFunction()">
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </button>
+    <div class="dropdown-content" id="myDropdown">
+      <%= link_to "Edit Profile", edit_user_registration_path%>
+      <%= link_to "Cancel my account", registration_path(@user), data: { confirm: "Are you sure?" }, method: :delete %>
+    </div>
+  </div>
+</div>
+<center>
+  <h2>All projects of Developer</h2>
+</center>
+<%check=0 %>
+<% @projects.each do |p| %>
+  <div class="container">
+    <p>
+      <strong>Name:</strong>
+      <%= p.name %>
+    </p>
+    <p>
+      <strong>Description:</strong>
+      <%= p.desc %>
+    </p>
+    <p>
+      <strong>Start Date:</strong>
+      <%= p.start_date %>
+    </p>
+    <p>
+      <strong>End Date:</strong>
+      <%= p.end_date %>
+    </p>
+    <div class="btn-group">
+      <center><button><%= link_to 'show', project_path(p), class:"mybuttons"%></button></center>
+    </div>
+    </div>
+  <br>
+<%end %>
+<br>
+<script>
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+ window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>

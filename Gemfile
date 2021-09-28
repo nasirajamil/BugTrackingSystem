@@ -9,6 +9,12 @@ gem 'rails', '~> 5.2.6'
 gem 'sqlite3'
 # Use Puma as the app server
 gem 'devise'
+gem 'omniauth-google-oauth2'
+gem "pundit"
+gem 'google-api-client'
+gem 'google-apis-calendar_v3'
+gem 'omniauth' 
+
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
